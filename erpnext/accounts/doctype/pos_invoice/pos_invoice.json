@@ -171,6 +171,7 @@
   "sales_team_section_break",
   "sales_partner",
   "column_break10",
+  "commission_base",
   "commission_rate",
   "total_commission",
   "section_break2",
@@ -1559,12 +1560,19 @@
    "label": "Coupon Code",
    "options": "Coupon Code",
    "print_hide": 1
+  },
+  {
+   "fieldname": "commission_base",
+   "fieldtype": "Currency",
+   "label": "Commission Base",
+   "options": "Company:company:default_currency",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-file-text",
  "is_submittable": 1,
  "links": [],
- "modified": "2021-08-24 18:19:20.728433",
+ "modified": "2021-09-06 06:27:52.939326",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "POS Invoice",

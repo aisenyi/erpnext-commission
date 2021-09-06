@@ -134,6 +134,7 @@
   "sales_team_section_break",
   "sales_partner",
   "column_break7",
+  "commission_base",
   "commission_rate",
   "total_commission",
   "section_break1",
@@ -1505,13 +1506,19 @@
    "fieldtype": "Small Text",
    "label": "Dispatch Address",
    "read_only": 1
+  },
+  {
+   "fieldname": "commission_base",
+   "fieldtype": "Currency",
+   "label": "Commission Base",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
  "links": [],
- "modified": "2021-08-17 20:15:26.531553",
+ "modified": "2021-09-03 08:23:27.096122",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",

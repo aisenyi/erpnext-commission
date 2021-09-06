@@ -138,7 +138,7 @@ class SellingController(StockController):
 			self.round_floats_in(sales_person)
 
 			sales_person.allocated_amount = flt(
-				self.base_net_total * sales_person.allocated_percentage / 100.0,
+				self.commission_base * sales_person.allocated_percentage / 100.0,
 				self.precision("allocated_amount", sales_person))
 
 			if sales_person.commission_rate:

@@ -156,6 +156,7 @@ erpnext.selling.SellingController = erpnext.TransactionController.extend({
 
 	commission_rate: function() {
 		this.calculate_commission();
+		refresh_field("commission_base");
 		refresh_field("total_commission");
 	},
 
@@ -184,7 +185,7 @@ erpnext.selling.SellingController = erpnext.TransactionController.extend({
 			sales_person.allocated_percentage = flt(sales_person.allocated_percentage,
 				precision("allocated_percentage", sales_person));
 
-			sales_person.allocated_amount = flt(this.frm.doc.base_net_total *
+			sales_person.allocated_amount = flt(this.frm.doc.commission_base *
 				sales_person.allocated_percentage / 100.0,
 				precision("allocated_amount", sales_person));
 				refresh_field(["allocated_amount"], sales_person);
@@ -258,8 +259,14 @@ erpnext.selling.SellingController = erpnext.TransactionController.extend({
 				frappe.msgprint(msg);
 				throw msg;
 			}
-
-			this.frm.doc.total_commission = flt(this.frm.doc.base_net_total * this.frm.doc.commission_rate / 100.0,
+			var commission_base = 0;
+			this.frm.doc.items.forEach(function(item){
+				if(item.grant_commission == 1){
+					commission_base =+ item.amount;
+				}
+			})
+			this.frm.doc.commission_base = commission_base;
+			this.frm.doc.total_commission = flt(this.frm.doc.commission_base * this.frm.doc.commission_rate / 100.0,
 				precision("total_commission"));
 		}
 	},
@@ -270,7 +277,7 @@ erpnext.selling.SellingController = erpnext.TransactionController.extend({
 			frappe.model.round_floats_in(sales_person);
 			if(sales_person.allocated_percentage) {
 				sales_person.allocated_amount = flt(
-					me.frm.doc.base_net_total * sales_person.allocated_percentage / 100.0,
+					me.frm.doc.commission_base * sales_person.allocated_percentage / 100.0,
 					precision("allocated_amount", sales_person));
 			}
 		});

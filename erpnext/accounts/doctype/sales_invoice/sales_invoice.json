@@ -181,6 +181,7 @@
   "sales_team_section_break",
   "sales_partner",
   "column_break10",
+  "commission_base",
   "commission_rate",
   "total_commission",
   "section_break2",
@@ -1993,9 +1994,7 @@
    "fieldtype": "Check",
    "hidden": 1,
    "label": "Ignore Default Payment Terms Template",
-   "read_only": 1,
-   "show_days": 1,
-   "show_seconds": 1
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
@@ -2011,6 +2010,12 @@
    "fieldtype": "Small Text",
    "label": "Dispatch Address",
    "read_only": 1
+  },
+  {
+   "fieldname": "commission_base",
+   "fieldtype": "Currency",
+   "label": "Commission Base",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-file-text",
@@ -2023,7 +2028,7 @@
    "link_fieldname": "consolidated_invoice"
   }
  ],
- "modified": "2021-08-25 14:46:05.279588",
+ "modified": "2021-09-03 16:13:17.798194",
  "modified_by": "Administrator",
  "module": "Accounts",
  "name": "Sales Invoice",
