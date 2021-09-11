@@ -157,24 +157,25 @@ erpnext.selling.SellingController = class SellingController extends erpnext.Tran
 
 	commission_rate() {
 		this.calculate_commission();
+		refresh_field("commission_base");
 		refresh_field("total_commission");
 	}
 
 	total_commission() {
 		if(this.frm.doc.base_net_total) {
-			frappe.model.round_floats_in(this.frm.doc, ["base_net_total", "total_commission"]);
+			frappe.model.round_floats_in(this.frm.doc, ["commission_base", "total_commission"]);
 
 			if(this.frm.doc.base_net_total < this.frm.doc.total_commission) {
 				var msg = (__("[Error]") + " " +
 					__(frappe.meta.get_label(this.frm.doc.doctype, "total_commission",
 						this.frm.doc.name)) + " > " +
-					__(frappe.meta.get_label(this.frm.doc.doctype, "base_net_total", this.frm.doc.name)));
+					__(frappe.meta.get_label(this.frm.doc.doctype, "commission_base", this.frm.doc.name)));
 				frappe.msgprint(msg);
 				throw msg;
 			}
 
 			this.frm.set_value("commission_rate",
-				flt(this.frm.doc.total_commission * 100.0 / this.frm.doc.base_net_total));
+				flt(this.frm.doc.total_commission * 100.0 / this.frm.doc.commission_base));
 		}
 	}
 
@@ -185,7 +186,7 @@ erpnext.selling.SellingController = class SellingController extends erpnext.Tran
 			sales_person.allocated_percentage = flt(sales_person.allocated_percentage,
 				precision("allocated_percentage", sales_person));
 
-			sales_person.allocated_amount = flt(this.frm.doc.base_net_total *
+			sales_person.allocated_amount = flt(this.frm.doc.commission_base *
 				sales_person.allocated_percentage / 100.0,
 				precision("allocated_amount", sales_person));
 				refresh_field(["allocated_amount"], sales_person);
@@ -260,7 +261,14 @@ erpnext.selling.SellingController = class SellingController extends erpnext.Tran
 				throw msg;
 			}
 
-			this.frm.doc.total_commission = flt(this.frm.doc.base_net_total * this.frm.doc.commission_rate / 100.0,
+			var commission_base = 0;
+			this.frm.doc.items.forEach(function(item){
+				if(item.grant_commission == 1){
+					commission_base =+ item.amount;
+				}
+			})
+			this.frm.doc.commission_base = commission_base;
+			this.frm.doc.total_commission = flt(this.frm.doc.commission_base * this.frm.doc.commission_rate / 100.0,
 				precision("total_commission"));
 		}
 	}
@@ -271,7 +279,7 @@ erpnext.selling.SellingController = class SellingController extends erpnext.Tran
 			frappe.model.round_floats_in(sales_person);
 			if(sales_person.allocated_percentage) {
 				sales_person.allocated_amount = flt(
-					me.frm.doc.base_net_total * sales_person.allocated_percentage / 100.0,
+					me.frm.doc.commission_base * sales_person.allocated_percentage / 100.0,
 					precision("allocated_amount", sales_person));
 			}
 		});
