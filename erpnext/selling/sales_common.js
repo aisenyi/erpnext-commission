@@ -162,19 +162,19 @@ erpnext.selling.SellingController = erpnext.TransactionController.extend({
 
 	total_commission: function() {
 		if(this.frm.doc.base_net_total) {
-			frappe.model.round_floats_in(this.frm.doc, ["base_net_total", "total_commission"]);
+			frappe.model.round_floats_in(this.frm.doc, ["commission_base", "total_commission"]);
 
 			if(this.frm.doc.base_net_total < this.frm.doc.total_commission) {
 				var msg = (__("[Error]") + " " +
 					__(frappe.meta.get_label(this.frm.doc.doctype, "total_commission",
 						this.frm.doc.name)) + " > " +
-					__(frappe.meta.get_label(this.frm.doc.doctype, "base_net_total", this.frm.doc.name)));
+					__(frappe.meta.get_label(this.frm.doc.doctype, "commission_base", this.frm.doc.name)));
 				frappe.msgprint(msg);
 				throw msg;
 			}
 
 			this.frm.set_value("commission_rate",
-				flt(this.frm.doc.total_commission * 100.0 / this.frm.doc.base_net_total));
+				flt(this.frm.doc.total_commission * 100.0 / this.frm.doc.commission_base));
 		}
 	},
 

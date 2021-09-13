@@ -121,11 +121,11 @@ class SellingController(StockController):
 
 	def calculate_commission(self):
 		if self.meta.get_field("commission_rate"):
-			self.round_floats_in(self, ["base_net_total", "commission_rate"])
+			self.round_floats_in(self, ["commission_base", "commission_rate"])
 			if self.commission_rate > 100.0:
 				throw(_("Commission rate cannot be greater than 100"))
 
-			self.total_commission = flt(self.base_net_total * self.commission_rate / 100.0,
+			self.total_commission = flt(self.commission_base * self.commission_rate / 100.0,
 				self.precision("total_commission"))
 
 	def calculate_contribution(self):
